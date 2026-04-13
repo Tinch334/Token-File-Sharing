@@ -35,7 +35,8 @@ func (s *Server) cli() {
 
         // General info.
         case "tokens":
-            fmt.Printf("Token length: %d\nToken count: %d\n", s.th.TokenLength(), s.th.TokenCount())
+            fmt.Printf("Token length: %d\nToken count: %d\nGenerated tokens: %d\n",
+                s.th.TokenLength(), s.th.TokenCount(), s.mtr.GetTokens())
 
         // Metrics.
         case "uptime":

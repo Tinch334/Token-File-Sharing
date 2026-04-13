@@ -4,8 +4,6 @@ import (
     "net"
     "context"
     "errors"
-    "strings"
-    "bufio"
     "math/rand/v2"
     "time"
     "fmt"
@@ -58,6 +56,7 @@ func (s *Server) StartServer() {
     wg, ctx := errgroup.WithContext(s.ctx)
 
     // Start worker pool.
+    // A closure is used to give the worker pool a function of the correct type, whilst maintaining struct access.
     s.wp.StartWorkerPool(ctx, func(ctx context.Context, conn net.Conn) (int, bool) {
         return s.handleConnection(ctx, conn)
     })
@@ -159,25 +158,4 @@ func (s *Server) serverRunner(ctx context.Context) error {
     }
 
     return nil
-}
-
-
-// Handles incoming connections to the server.
-func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, bool) {
-    reader := bufio.NewReader(conn)
-    message, err := reader.ReadString('\n')
-    if err != nil {
-        log.Printf("Read error: %v", err)
-        return 0, false
-    }
-
-
-    ackMsg := strings.ToUpper(strings.TrimSpace(message))
-    response := fmt.Sprintf("ACK: %s\n", ackMsg)
-    _, err = conn.Write([]byte(response))
-    if err != nil {
-        log.Printf("Server write error: %v", err)
-    }
-
-    return 0, false
 }
