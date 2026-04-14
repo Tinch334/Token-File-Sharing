@@ -2,8 +2,6 @@ package server
 
 
 import (
-    "fmt"
-	"strings"
     "errors"
     "time"
     "slices"
@@ -12,7 +10,9 @@ import (
     "io"
     "encoding/binary"
 
-	"github.com/rs/zerolog/log"
+    "fmt"
+
+	//"github.com/rs/zerolog/log"
 )
 
 
@@ -20,132 +20,159 @@ import (
 // The error string should contain a description of the error.
 type TypeHandler func([][]byte) ([]byte, error)
 
-var handlerMap = map[MessageCode]TypeHandler{
+var handlerMap = map[byte]TypeHandler{
     ERR:      dummy,
     USR_CONN: dummy,
     TOK_CONN: dummy,
     ECHO_S:   echoHandler,
-    ECHO_R:   dummy
+    ECHO_R:   dummy,
     FLE_LST:  dummy,
 }
 
 
 // Handles incoming connections to the server.
 func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, error) {
+    defer conn.Close()
+
     // Set read deadline in case connected host disconnects.
     conn.SetReadDeadline(time.Now().Add(5 * time.Second))
     conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 
-    var err error
-
     // Read packet type.
     header := make([]byte, 1)
-    _, err = io.ReadFull(conn, header)
-
-    if err != nil {
-        // Invalid packet size.
+    if _, err := io.ReadFull(conn, header); err != nil {
         if err == io.ErrUnexpectedEOF {
-            // Send error message.
-            
+            sendError("Truncated header", conn)
         }
-        conn.Close()
-        return 0, err
+        return 0, fmt.Errorf("Error reading header: %w", err)
     }
 
-    // Stores all data blocks.
+    // Read data blocks until ADDITIONAL_BLOCK_NO.
     var data [][]byte
-
     for {
         // Read packet data size.
         packetSizeBytes := make([]byte, 4)
-        _, err = io.ReadFull(conn, packetSizeBytes)
-
-        if err != nil {
-            // Invalid packet size.
+        if _, err := io.ReadFull(conn, packetSizeBytes); err != nil {
             if err == io.ErrUnexpectedEOF {
-                // Send error message.
-                
+                sendError("Truncated block size", conn)
             }
-            conn.Close()
-            return 0, err
+            return 0, fmt.Errorf("Error reading block size: %w", err)
         }
 
         // Read packet data.
-        packetSize := binary.BigEndian.Uint32(packetSizeBytes)
-        packet := make([]byte, packetSize)
-        _, err = io.ReadFull(conn, packet)
-
-        if err != nil {
-            // Invalid packet size.
+        blockSize := binary.BigEndian.Uint32(packetSizeBytes)
+        block := make([]byte, blockSize)
+        if _, err := io.ReadFull(conn, block); err != nil {
             if err == io.ErrUnexpectedEOF {
-                // Send error message.
-                
+                sendError("Truncated block data", conn)
             }
-            conn.Close()
-            return 0, err
+            return 0, fmt.Errorf("Error reading block data: %w", err)
         }
 
         // Store read packet data.
-        data = append(data, packet)
+        data = append(data, block)
 
-        // Read additional block indicator.
-        aBlock := make([]byte, 1)
-        _, err = io.ReadFull(conn, aBlock)
-
-        if err != nil {
+        // Read continuation indicator.
+        cIndicator := make([]byte, 1)
+        if _, err := io.ReadFull(conn, cIndicator); err != nil {
             // Invalid packet size.
             if err == io.ErrUnexpectedEOF {
-                // Send error message.
-                
+                sendError("Truncated continuation data", conn)
             }
-            conn.Close()
-            return 0, err
+            return 0, fmt.Errorf("Error continuation bytes: %w", err)
         }
 
+        fmt.Printf("header:%X  blockSize:%d  block:%X  cont:%X\n",
+            header, blockSize, block, cIndicator)
+
         // Check if there's more data to be read.
-        if aBlock == ADDITIONAL_BLOCK_NO {
+        if cIndicator[0] == ADDITIONAL_BLOCK_NO {
             break
         }
     }
 
+    // Dispatch to appropriate handler.
+    handler, ok := handlerMap[header[0]]
+    if !ok {
+        return 0, sendError(fmt.Sprintf("Unknown command: %X", header[0]), conn)
+    }
 
+    fmt.Printf("Data:%X\n", data)
 
-    return 0, nil
+    // Call handler with received data and send response.
+    resData, err := handler(data)
+    if err != nil {
+        return 0, sendError(fmt.Sprintf("Error handling %X, encountered: %v", header[0], err), conn)
+    }
+
+    return 0, sendPacket(resData, conn)
 }
 
-// printf '\x01\x00\x00\x00\x05\x48\x65\x6c\x6c\x6f\xAA' | nc localhost "8000"
+// printf '\x04\x00\x00\x00\x05\x48\x65\x6c\x6c\x6f\xAA' | nc localhost "8000"
 
 // makePacket returns a properly formatted packet with the given header and data.
 func makePacket(header byte, dataList [][]byte) ([]byte, error) {
     var res []byte
     // Add header.
-    res = append(res, header)
+    res = []byte{header}
 
-    for _, data := range dataList {
+    for i, block := range dataList {
         // Get data length and check it's validity.
-        dataLen := len(data)
-        if dataLen > MAX_DATA_SIZE {
+        if len(block) > MAX_DATA_SIZE {
             return nil, errors.New("Data exceeded maximum data size")
         }
 
-        // Grow slice to fit data size and data block.
-        res = slices.Grow(res, DATA_BLOCK_SIZE + dataLen)
-        // Append length prefix and data.
-        binary.BigEndian.PutUint32(res, uint32(dataLen))
-        res = append(res, data...)
+        lenBuf := make([]byte, 4)
+        binary.BigEndian.PutUint32(lenBuf, uint32(len(block)))
+
+        // Grow slice to fit block size, block and continuation indicator, append data.
+        res = slices.Grow(res, DATA_BLOCK_SIZE + len(block) + 1)
+        res = append(res, lenBuf...)
+        res = append(res, block...)
+    
+        // Set continuation byte.
+        if i < len(dataList) - 1 {
+            res = append(res, ADDITIONAL_BLOCK_YES)
+        } else {
+            res = append(res, ADDITIONAL_BLOCK_NO)
+        }
     }
 
     return res, nil
 }
 
 
-// dummy is a type-correct function for testing.
+// sendPacket sends the given data to the connection.
+func sendPacket(data []byte, conn net.Conn) error {
+    _, err := conn.Write(data)
+    return err
+}
+
+
+// sendError sends an ERR packet to conn with the given error string, the error will not be returned.
+// An error is only returned in case of a send error.
+func sendError(errorMsg string, conn net.Conn) error {
+    // Create a slice of slices with the error message.
+    packet, err := makePacket(ERR, [][]byte{[]byte(errorMsg)})
+    if err != nil {
+        return fmt.Errorf("Error building error packet: %w\n", err)
+    }
+
+    if  _, err = conn.Write(packet); err != nil {
+        return fmt.Errorf("Error building error packet: %w\n", err)
+    }
+
+    return err
+}
+
+
+// dummy is a placeholder handler.
 func dummy(data [][]byte) ([]byte, error) {
     return nil, nil
 }
 
 
-// echoHandler returns a packet of the appropriate type with the received data.
+// echoHandler returns an ECHO_R packet with all the received data.
 func echoHandler(data [][]byte) ([]byte, error) {
-    return makePacket(ECHO_R, data), nil
+    return makePacket(ECHO_R, data)
 }

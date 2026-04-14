@@ -7,11 +7,8 @@ const MAX_DATA_SIZE = 4294967296
 const ADDITIONAL_BLOCK_YES = 0xCC
 const ADDITIONAL_BLOCK_NO = 0xAA
 
-
-type MessageCode int
-
 const (
-	ERR      MessageCode = iota + 1
+	ERR      byte = iota + 1
 	USR_CONN
 	TOK_CONN
 	ECHO_S

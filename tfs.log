@@ -97,3 +97,228 @@
 2026-04-14 05:08:18 INF Worker pool clean-up
 2026-04-14 05:08:18 INF Context cancelled, sever listener closing
 2026-04-14 05:08:18 INF Context cancelled, listener closed gracefully
+2026-04-14 19:23:54 INF Server logging started
+2026-04-14 19:23:54 INF Started worker pool
+2026-04-14 19:23:54 INF Token added ttl=10000 value=0
+2026-04-14 19:23:54 INF Token added ttl=30000 value=1
+2026-04-14 19:23:54 INF Token added ttl=60000 value=2
+2026-04-14 19:23:54 INF Token added ttl=40000 value=3
+2026-04-14 19:23:54 INF Token added ttl=10000 value=4
+2026-04-14 19:23:54 INF Token added ttl=40000 value=5
+2026-04-14 19:23:54 INF Token added ttl=30000 value=6
+2026-04-14 19:23:54 INF Token added ttl=60000 value=7
+2026-04-14 19:23:54 INF Token added ttl=50000 value=8
+2026-04-14 19:23:54 INF Token added ttl=30000 value=9
+2026-04-14 19:23:54 INF Server listener started
+2026-04-14 19:23:58 INF Token cleaner running
+2026-04-14 19:24:03 INF Token cleaner running
+2026-04-14 19:24:03 INF Token expired value=4
+2026-04-14 19:24:03 INF Token expired value=0
+2026-04-14 19:24:08 INF Token cleaner running
+2026-04-14 19:24:13 INF Token cleaner running
+2026-04-14 19:24:18 INF Token cleaner running
+2026-04-14 19:26:01 INF Server logging started
+2026-04-14 19:26:01 INF Started worker pool
+2026-04-14 19:26:01 INF Token added ttl=40000 value=0
+2026-04-14 19:26:01 INF Token added ttl=30000 value=1
+2026-04-14 19:26:01 INF Token added ttl=30000 value=2
+2026-04-14 19:26:01 INF Token added ttl=60000 value=3
+2026-04-14 19:26:01 INF Token added ttl=20000 value=4
+2026-04-14 19:26:01 INF Token added ttl=10000 value=5
+2026-04-14 19:26:01 INF Token added ttl=30000 value=6
+2026-04-14 19:26:01 INF Token added ttl=50000 value=7
+2026-04-14 19:26:01 INF Token added ttl=40000 value=8
+2026-04-14 19:26:01 INF Token added ttl=40000 value=9
+2026-04-14 19:26:01 INF Server listener started
+2026-04-14 19:26:06 INF Token cleaner running
+2026-04-14 19:26:11 INF Token cleaner running
+2026-04-14 19:26:11 INF Token expired value=5
+2026-04-14 19:26:16 INF Token cleaner running
+2026-04-14 19:26:21 INF Token cleaner running
+2026-04-14 19:26:21 INF Token expired value=4
+2026-04-14 19:26:26 INF Token cleaner running
+2026-04-14 19:26:31 INF Token cleaner running
+2026-04-14 19:26:31 INF Token expired value=6
+2026-04-14 19:26:31 INF Token expired value=1
+2026-04-14 19:26:31 INF Token expired value=2
+2026-04-14 19:26:35 INF Token cleaner running
+2026-04-14 19:26:44 INF Server logging started
+2026-04-14 19:26:44 INF Started worker pool
+2026-04-14 19:26:44 INF Token added ttl=60000 value=0
+2026-04-14 19:26:44 INF Token added ttl=10000 value=1
+2026-04-14 19:26:44 INF Token added ttl=10000 value=2
+2026-04-14 19:26:44 INF Token added ttl=10000 value=3
+2026-04-14 19:26:44 INF Token added ttl=50000 value=4
+2026-04-14 19:26:44 INF Token added ttl=50000 value=5
+2026-04-14 19:26:44 INF Token added ttl=60000 value=6
+2026-04-14 19:26:44 INF Token added ttl=60000 value=7
+2026-04-14 19:26:44 INF Token added ttl=40000 value=8
+2026-04-14 19:26:44 INF Token added ttl=40000 value=9
+2026-04-14 19:26:44 INF Server listener started
+2026-04-14 19:26:49 INF Token cleaner running
+2026-04-14 19:26:54 INF Token cleaner running
+2026-04-14 19:26:54 INF Token expired value=2
+2026-04-14 19:26:54 INF Token expired value=1
+2026-04-14 19:26:54 INF Token expired value=3
+2026-04-14 19:27:05 INF Server logging started
+2026-04-14 19:27:05 INF Started worker pool
+2026-04-14 19:27:05 INF Token added ttl=50000 value=0
+2026-04-14 19:27:05 INF Token added ttl=50000 value=1
+2026-04-14 19:27:05 INF Token added ttl=30000 value=2
+2026-04-14 19:27:05 INF Token added ttl=50000 value=3
+2026-04-14 19:27:05 INF Token added ttl=40000 value=4
+2026-04-14 19:27:05 INF Token added ttl=40000 value=5
+2026-04-14 19:27:05 INF Token added ttl=30000 value=6
+2026-04-14 19:27:05 INF Token added ttl=60000 value=7
+2026-04-14 19:27:05 INF Token added ttl=30000 value=8
+2026-04-14 19:27:05 INF Token added ttl=40000 value=9
+2026-04-14 19:27:05 INF Server listener started
+2026-04-14 19:27:09 INF Token cleaner running
+2026-04-14 19:27:11 WRN Worker pool worker returned an error error="read tcp 127.0.0.1:8000->127.0.0.1:49692: i/o timeout"
+2026-04-14 19:27:14 INF Token cleaner running
+2026-04-14 19:27:21 INF Server logging started
+2026-04-14 19:27:21 INF Started worker pool
+2026-04-14 19:27:21 INF Token added ttl=50000 value=0
+2026-04-14 19:27:21 INF Token added ttl=30000 value=1
+2026-04-14 19:27:21 INF Token added ttl=40000 value=2
+2026-04-14 19:27:21 INF Token added ttl=40000 value=3
+2026-04-14 19:27:21 INF Token added ttl=60000 value=4
+2026-04-14 19:27:21 INF Token added ttl=40000 value=5
+2026-04-14 19:27:21 INF Token added ttl=40000 value=6
+2026-04-14 19:27:21 INF Token added ttl=30000 value=7
+2026-04-14 19:27:21 INF Token added ttl=20000 value=8
+2026-04-14 19:27:21 INF Token added ttl=10000 value=9
+2026-04-14 19:27:21 INF Server listener started
+2026-04-14 19:27:26 INF Token cleaner running
+2026-04-14 19:27:27 WRN Worker pool worker returned an error error="read tcp 127.0.0.1:8000->127.0.0.1:47778: i/o timeout"
+2026-04-14 19:27:31 INF Token cleaner running
+2026-04-14 19:27:31 INF Token expired value=9
+2026-04-14 19:27:37 INF Server logging started
+2026-04-14 19:27:37 INF Started worker pool
+2026-04-14 19:27:37 INF Token added ttl=30000 value=0
+2026-04-14 19:27:37 INF Token added ttl=60000 value=1
+2026-04-14 19:27:37 INF Token added ttl=40000 value=2
+2026-04-14 19:27:37 INF Token added ttl=50000 value=3
+2026-04-14 19:27:37 INF Token added ttl=50000 value=4
+2026-04-14 19:27:37 INF Token added ttl=60000 value=5
+2026-04-14 19:27:37 INF Token added ttl=50000 value=6
+2026-04-14 19:27:37 INF Token added ttl=50000 value=7
+2026-04-14 19:27:37 INF Token added ttl=30000 value=8
+2026-04-14 19:27:37 INF Token added ttl=50000 value=9
+2026-04-14 19:27:37 INF Server listener started
+2026-04-14 19:27:41 INF Token cleaner running
+2026-04-14 19:27:43 WRN Worker pool worker returned an error error="read tcp 127.0.0.1:8000->127.0.0.1:34276: i/o timeout"
+2026-04-14 19:27:46 INF Token cleaner running
+2026-04-14 19:27:51 INF Token cleaner running
+2026-04-14 19:27:56 INF Token cleaner running
+2026-04-14 19:28:01 INF Token cleaner running
+2026-04-14 19:28:06 INF Token cleaner running
+2026-04-14 19:28:06 INF Token expired value=0
+2026-04-14 19:28:06 INF Token expired value=8
+2026-04-14 19:28:11 INF Token cleaner running
+2026-04-14 19:28:16 INF Token cleaner running
+2026-04-14 19:28:16 INF Token expired value=2
+2026-04-14 19:28:21 INF Token cleaner running
+2026-04-14 19:28:29 INF Server logging started
+2026-04-14 19:28:29 INF Started worker pool
+2026-04-14 19:28:29 INF Token added ttl=60000 value=0
+2026-04-14 19:28:29 INF Token added ttl=10000 value=1
+2026-04-14 19:28:29 INF Token added ttl=40000 value=2
+2026-04-14 19:28:29 INF Token added ttl=60000 value=3
+2026-04-14 19:28:29 INF Token added ttl=60000 value=4
+2026-04-14 19:28:29 INF Token added ttl=60000 value=5
+2026-04-14 19:28:29 INF Token added ttl=40000 value=6
+2026-04-14 19:28:29 INF Token added ttl=30000 value=7
+2026-04-14 19:28:29 INF Token added ttl=30000 value=8
+2026-04-14 19:28:29 INF Token added ttl=40000 value=9
+2026-04-14 19:28:29 INF Server listener started
+2026-04-14 19:28:34 INF Token cleaner running
+2026-04-14 19:28:39 INF Token cleaner running
+2026-04-14 19:28:39 INF Token expired value=1
+2026-04-14 19:28:43 INF Token cleaner running
+2026-04-14 19:58:17 INF Server logging started
+2026-04-14 19:58:17 INF Started worker pool
+2026-04-14 19:58:17 INF Token added ttl=40000 value=0
+2026-04-14 19:58:17 INF Token added ttl=30000 value=1
+2026-04-14 19:58:17 INF Token added ttl=20000 value=2
+2026-04-14 19:58:17 INF Token added ttl=40000 value=3
+2026-04-14 19:58:17 INF Token added ttl=10000 value=4
+2026-04-14 19:58:17 INF Token added ttl=40000 value=5
+2026-04-14 19:58:17 INF Token added ttl=60000 value=6
+2026-04-14 19:58:17 INF Token added ttl=10000 value=7
+2026-04-14 19:58:17 INF Token added ttl=10000 value=8
+2026-04-14 19:58:17 INF Token added ttl=50000 value=9
+2026-04-14 19:58:17 INF Server listener started
+2026-04-14 19:58:21 INF Token cleaner running
+2026-04-14 19:58:26 INF Token cleaner running
+2026-04-14 19:58:26 INF Token expired value=8
+2026-04-14 19:58:26 INF Token expired value=4
+2026-04-14 19:58:26 INF Token expired value=7
+2026-04-14 19:58:31 INF Token cleaner running
+2026-04-14 19:58:36 INF Token cleaner running
+2026-04-14 19:58:36 INF Token expired value=2
+2026-04-14 19:58:41 INF Token cleaner running
+2026-04-14 19:58:46 INF Token cleaner running
+2026-04-14 19:58:46 INF Token expired value=1
+2026-04-14 19:58:51 INF Token cleaner running
+2026-04-14 19:58:56 INF Token cleaner running
+2026-04-14 19:58:56 INF Token expired value=5
+2026-04-14 19:58:56 INF Token expired value=0
+2026-04-14 19:58:56 INF Token expired value=3
+2026-04-14 19:59:01 INF Token cleaner running
+2026-04-14 19:59:06 INF Token cleaner running
+2026-04-14 19:59:06 INF Token expired value=9
+2026-04-14 19:59:11 INF Token cleaner running
+2026-04-14 19:59:16 INF Token cleaner running
+2026-04-14 19:59:16 INF Token expired value=6
+2026-04-14 19:59:21 INF Token cleaner running
+2026-04-14 19:59:25 INF Token cleaner running
+2026-04-14 19:59:30 INF Token cleaner running
+2026-04-14 19:59:35 INF Token cleaner running
+2026-04-14 19:59:40 INF Token cleaner running
+2026-04-14 19:59:45 INF Token cleaner running
+2026-04-14 19:59:50 INF Token cleaner running
+2026-04-14 19:59:54 INF Token cleaner running
+2026-04-14 19:59:59 INF Server logging started
+2026-04-14 19:59:59 INF Started worker pool
+2026-04-14 19:59:59 INF Token added ttl=50000 value=0
+2026-04-14 19:59:59 INF Token added ttl=50000 value=1
+2026-04-14 19:59:59 INF Token added ttl=30000 value=2
+2026-04-14 19:59:59 INF Token added ttl=40000 value=3
+2026-04-14 19:59:59 INF Token added ttl=10000 value=4
+2026-04-14 19:59:59 INF Token added ttl=40000 value=5
+2026-04-14 19:59:59 INF Token added ttl=30000 value=6
+2026-04-14 19:59:59 INF Token added ttl=30000 value=7
+2026-04-14 19:59:59 INF Token added ttl=40000 value=8
+2026-04-14 19:59:59 INF Token added ttl=20000 value=9
+2026-04-14 19:59:59 INF Server listener started
+2026-04-14 20:00:04 INF Token cleaner running
+2026-04-14 20:00:09 INF Token cleaner running
+2026-04-14 20:00:09 INF Token expired value=4
+2026-04-14 20:00:14 INF Token cleaner running
+2026-04-14 20:00:19 INF Token cleaner running
+2026-04-14 20:00:19 INF Token expired value=9
+2026-04-14 20:00:24 INF Token cleaner running
+2026-04-14 20:00:29 INF Token cleaner running
+2026-04-14 20:00:29 INF Token expired value=7
+2026-04-14 20:00:29 INF Token expired value=6
+2026-04-14 20:00:29 INF Token expired value=2
+2026-04-14 20:00:33 INF Token cleaner running
+2026-04-14 20:00:38 INF Token cleaner running
+2026-04-14 20:00:38 INF Token expired value=8
+2026-04-14 20:00:38 INF Token expired value=3
+2026-04-14 20:00:38 INF Token expired value=5
+2026-04-14 20:00:43 INF Token cleaner running
+2026-04-14 20:00:49 INF Token cleaner running
+2026-04-14 20:00:49 INF Token expired value=0
+2026-04-14 20:00:49 INF Token expired value=1
+2026-04-14 20:00:53 INF Token cleaner running
+2026-04-14 20:00:58 INF Token cleaner running
+2026-04-14 20:01:03 INF Token cleaner running
+2026-04-14 20:01:08 INF Token cleaner running
+2026-04-14 20:01:13 INF Token cleaner running
+2026-04-14 20:01:18 INF Token cleaner running
+2026-04-14 20:01:19 INF Token cleaner stopping
+2026-04-14 20:01:19 INF Worker pool clean-up
+2026-04-14 20:01:19 INF Context cancelled, sever listener closing
+2026-04-14 20:01:19 INF Context cancelled, listener closed gracefully
