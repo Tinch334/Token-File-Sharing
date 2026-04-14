@@ -9,7 +9,6 @@ import (
     "fmt"
 
     "github.com/Tinch334/bmap"
-
     "github.com/rs/zerolog/log"
 )
 

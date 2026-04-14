@@ -8,12 +8,12 @@ import (
     "time"
     "fmt"
 
+    "github.com/rs/zerolog/log"
+    "golang.org/x/sync/errgroup"
+
     "github.com/Tinch334/Token-File-Sharing/tokens"
     "github.com/Tinch334/Token-File-Sharing/workers"
     "github.com/Tinch334/Token-File-Sharing/metrics"
-
-    "github.com/rs/zerolog/log"
-    "golang.org/x/sync/errgroup"
 )
 
 
@@ -57,9 +57,20 @@ func (s *Server) StartServer() {
 
     // Start worker pool.
     // A closure is used to give the worker pool a function of the correct type, whilst maintaining struct access.
-    s.wp.StartWorkerPool(ctx, func(ctx context.Context, conn net.Conn) (int, bool) {
+    s.wp.StartWorkerPool(ctx, func(ctx context.Context, conn net.Conn) (int, error) {
         return s.handleConnection(ctx, conn)
     })
+
+    // Clean worker result channel.
+    go func() {
+        select {
+        case <-s.wp.Results():
+            // Ignore results.
+        case <-ctx.Done():
+            return
+        }
+    }()
+
 
     // Generate tokens for testing.
     for i := 0; i < 10; i++ {

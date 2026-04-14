@@ -2,12 +2,11 @@ package main
 
 import (
     "os"
-    
-    "github.com/Tinch334/Token-File-Sharing/server"
-    
 
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
+
+    "github.com/Tinch334/Token-File-Sharing/server"
 )
 
 

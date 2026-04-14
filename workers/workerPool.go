@@ -26,11 +26,10 @@ func CreateWorkerPool[J any, R any](workers, jobQueueSize, resultQueueSize int) 
 }
 
 
-// Starts the worker pool, with the given handler.
-// The handlers get any additional information they need in the context, the handler returns (R, bool) where the boolean
-// indicates if there are results to be sent to the result queue.
-func (wp *WorkerPool[J, R]) StartWorkerPool(ctx context.Context, handler func(context.Context, J) (R, bool)) {
-    worker := func(id int) {
+// Starts the worker pool, with the given worker function.
+// The workers get any additional information they need in the context, the handler returns (R, error)
+func (wp *WorkerPool[J, R]) StartWorkerPool(ctx context.Context, workerFunc func(context.Context, J) (R, error)) {
+    worker := func() {
         // Signal when this worker finished.
         wp.wg.Add(1)
         defer wp.wg.Done()
@@ -47,10 +46,14 @@ func (wp *WorkerPool[J, R]) StartWorkerPool(ctx context.Context, handler func(co
                 }
 
                 // Perform job and get result.
-                res, hasRes := handler(ctx, job)
+                res, err := workerFunc(ctx, job)
 
-                // Handler gave no result.
-                if !hasRes {
+                // Handler returned an error.
+                if err != nil{
+                    log.Warn().
+                        Err(err).
+                        Msg("Worker pool worker returned an error")
+
                     continue
                 }
 
@@ -66,8 +69,8 @@ func (wp *WorkerPool[J, R]) StartWorkerPool(ctx context.Context, handler func(co
     }
 
     // Start workers.
-    for i := range wp.workers {
-        go worker(i)
+    for range wp.workers {
+        go worker()
     }
 
     // Start clean-up thread for results channel.
