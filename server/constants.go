@@ -8,11 +8,16 @@ const ADDITIONAL_BLOCK_YES = 0xCC
 const ADDITIONAL_BLOCK_NO = 0xAA
 
 const (
-	ERR      byte = iota + 1
+	ERR      byte = iota
 	USR_CONN
 	TOK_CONN
+	CLOSE
+	TOK_RES
+	OK
 	ECHO_S
 	ECHO_R
 	FLE_LST
+	FLE_DWN
+	FLE_UP
 )
 

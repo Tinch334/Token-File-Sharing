@@ -15,6 +15,7 @@ import (
 
 type TokenHandler[T comparable] struct {
     tokenLength     uint
+    tokenTTL        time.Duration
     checkDuplicates bool
 
     // Stores tokens and their associated usernames.
@@ -31,11 +32,12 @@ type TokenHandler[T comparable] struct {
 
 // NewTokenHandler creates a new, empty token handler.
 // "ctx" is a context used to stop the cleaner routine.
-// A recommended token length to avoid collisions with reasonable amounts of tokens is 64.
-func NewTokenHandler[T comparable](ctx context.Context, tokLen uint, chkDup bool, cleanerInt time.Duration) *TokenHandler[T] {
+// A recommended token length to avoid collisions with reasonable amounts of tokens is 128.
+func NewTokenHandler[T comparable](ctx context.Context, tokenLength uint, tokenTTL time.Duration, checkDuplicates bool, cleanerInt time.Duration) *TokenHandler[T] {
     th := TokenHandler[T]{
-        tokenLength:     tokLen,
-        checkDuplicates: chkDup,
+        tokenLength:     tokenLength,
+        tokenTTL:        tokenTTL,
+        checkDuplicates: checkDuplicates,
 
         tokens:          bmap.NewBMap[string, T](),
         tokenTimers:     make(map[string]time.Time),
@@ -48,24 +50,9 @@ func NewTokenHandler[T comparable](ctx context.Context, tokLen uint, chkDup bool
 }
 
 
-// validTime checks whether the given token hasn't expired, returns false is the token isn't present or has expired.
-func (th *TokenHandler[T]) ValidateTokenTime(tok string) bool {
-    th.timeMutex.RLock()
-    defer th.timeMutex.RUnlock()
-
-    expTime, prs := th.tokenTimers[tok]
-
-    if !prs {
-        return false
-    }
-
-    // Check if token has expired.
-    return !time.Now().After(expTime)
-}
-
 // GenerateToken generates a new token for the given element, the generated token is returned.
 // Checks for duplicated tokens if instructed.
-func (th *TokenHandler[T]) GenerateToken(elem T, ttl time.Duration) string {
+func (th *TokenHandler[T]) GenerateToken(elem T) string {
     sb := make([]byte, th.tokenLength)
 
     for {
@@ -79,17 +66,48 @@ func (th *TokenHandler[T]) GenerateToken(elem T, ttl time.Duration) string {
 
             // Add element to bmap and set it's time.
             th.tokens.InsertForward(st, elem)
-            th.tokenTimers[st] = time.Now().Add(ttl)
+            th.tokenTimers[st] = time.Now().Add(th.tokenTTL)
 
             log.Info().
                 Str("value", fmt.Sprintf("%v", elem)).
-                Dur("ttl", ttl).
+                Dur("ttl", th.tokenTTL).
                 Msg("Token added")
 
             return st
         }
     }
 }
+
+
+// ValidateToken returns true if the given token is valid and hasn't expired.
+func (th *TokenHandler[T]) ValidateToken(tok string) bool {
+    th.timeMutex.RLock()
+    defer th.timeMutex.RUnlock()
+
+    expTime, prs := th.tokenTimers[tok]
+    // Token not present.
+    if !prs {
+        return false
+    }
+    // Check if token has expired.
+    return !time.Now().After(expTime)
+
+}
+
+
+// ResetTokenTimer resets the timer of the given token, if it exists.
+func (th *TokenHandler[T]) ResetTokenTimer(tok string) {
+    th.timeMutex.Lock()
+    defer th.timeMutex.Unlock()
+
+    // Token not present.
+    if _, prs := th.tokenTimers[tok]; !prs {
+        return
+    }
+    // Rest timer.
+    th.tokenTimers[tok] = time.Now().Add(th.tokenTTL)
+}
+
 
 // TokenCount returns the amount of tokens.
 func (th *TokenHandler[T]) TokenCount() int {

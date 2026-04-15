@@ -4,9 +4,7 @@ import (
     "net"
     "context"
     "errors"
-    "math/rand/v2"
     "time"
-    "fmt"
 
     "github.com/rs/zerolog/log"
     "golang.org/x/sync/errgroup"
@@ -24,7 +22,7 @@ type Server struct {
 
     port   string
 
-    th     *tokens.TokenHandler[int]
+    th     *tokens.TokenHandler[string]
     wp     *workers.WorkerPool[net.Conn, int]
     mtr    *metrics.Metrics
 }
@@ -33,7 +31,7 @@ type Server struct {
 // NewServer creates a new server on the given port.
 func NewServer(port string) *Server {
     ctx, cancel := context.WithCancel(context.Background())
-    th := tokens.NewTokenHandler[int](ctx, 8, true, 5*time.Second)
+    th := tokens.NewTokenHandler[string](ctx, 4, 30*time.Minute, true, 5*time.Second)
     wp := workers.CreateWorkerPool[net.Conn, int](10, 20, 20)
     mtr := metrics.InitMetrics()
 
@@ -70,15 +68,6 @@ func (s *Server) StartServer() {
             return
         }
     }()
-
-
-    // Generate tokens for testing.
-    for i := 0; i < 10; i++ {
-        et := time.Duration(10 * (1 + rand.IntN(6)))
-        nt := s.th.GenerateToken(i, et*time.Second)
-        fmt.Printf("\"%x\", et: %v\n", nt, et*time.Second)
-    }
-
 
     // Start server and add to wait group.
     wg.Go(func() error {
