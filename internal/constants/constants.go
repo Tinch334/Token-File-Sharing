@@ -23,6 +23,6 @@ const (
 
 // File constants.
 const DATA_FOLDER = "data"
-const CREDENTIALS_FILE = "credentials.csv"
+const CREDENTIALS_FILE = "credentials.sql"
 const CONFIG_FILE = "config.yaml"
 const LOG_FILE = "server_log.log"

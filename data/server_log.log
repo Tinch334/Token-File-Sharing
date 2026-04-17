@@ -1,9 +1,28 @@
-2026-04-16 06:14:27 INF Server logging started
-2026-04-16 06:14:27 INF Started worker pool
-2026-04-16 06:14:27 INF Server listener started
-2026-04-16 06:14:32 INF Token cleaner running
-2026-04-16 06:14:37 INF Token cleaner running
-2026-04-16 06:14:38 INF Token cleaner stopping
-2026-04-16 06:14:38 INF Context cancelled, sever listener closing
-2026-04-16 06:14:38 INF Worker pool clean-up
-2026-04-16 06:14:38 INF Context cancelled, listener closed gracefully
+2026-04-17 05:51:17 INF Server logging started
+2026-04-17 05:51:17 INF Started credential DB
+2026-04-17 05:51:17 INF Started worker pool
+2026-04-17 05:51:17 INF Server listener started
+2026-04-17 05:51:19 INF Token cleaner stopping
+2026-04-17 05:51:19 INF Context cancelled, sever listener closing
+2026-04-17 05:51:19 INF Worker pool clean-up
+2026-04-17 05:51:19 INF Context cancelled, listener closed gracefully
+2026-04-17 05:51:19 INF Closed credential DB
+2026-04-17 06:10:20 INF Server logging started
+2026-04-17 06:10:20 INF Created credential DB
+2026-04-17 06:10:20 INF Started worker pool
+2026-04-17 06:10:20 INF Server listener started
+2026-04-17 06:10:23 INF Context cancelled, sever listener closing
+2026-04-17 06:10:23 INF Token cleaner stopping
+2026-04-17 06:10:23 INF Worker pool clean-up
+2026-04-17 06:10:23 INF Context cancelled, listener closed gracefully
+2026-04-17 06:10:23 INF Closed credential DB
+2026-04-17 06:11:04 INF Server logging started
+2026-04-17 06:11:04 INF Created credential DB
+2026-04-17 06:11:04 INF Started worker pool
+2026-04-17 06:11:04 INF Server listener started
+2026-04-17 06:11:08 INF Token cleaner running
+2026-04-17 06:11:09 INF Token cleaner stopping
+2026-04-17 06:11:09 INF Context cancelled, sever listener closing
+2026-04-17 06:11:09 INF Worker pool clean-up
+2026-04-17 06:11:09 INF Context cancelled, listener closed gracefully
+2026-04-17 06:11:09 INF Closed credential DB

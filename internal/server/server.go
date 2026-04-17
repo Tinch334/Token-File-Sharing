@@ -13,6 +13,7 @@ import (
     "github.com/Tinch334/Token-File-Sharing/internal/tokens"
     "github.com/Tinch334/Token-File-Sharing/internal/workers"
     "github.com/Tinch334/Token-File-Sharing/internal/metrics"
+    "github.com/Tinch334/Token-File-Sharing/internal/credentials"
 )
 
 
@@ -26,15 +27,27 @@ type Server struct {
     th     *tokens.TokenHandler[string]
     wp     *workers.WorkerPool[net.Conn, int]
     mtr    *metrics.Metrics
+    credDB *credentials.CredentialDB
 }
 
 
 // NewServer creates a new server on the given port.
-func NewServer(port string) *Server {
+func NewServer(port string, dbPath string) *Server {
     ctx, cancel := context.WithCancel(context.Background())
     th := tokens.NewTokenHandler[string](ctx, 4, 30*time.Minute, true, 5*time.Second)
     wp := workers.CreateWorkerPool[net.Conn, int](10, 20, 20)
     mtr := metrics.InitMetrics()
+
+    credentialsStmt := `
+    CREATE TABLE IF NOT EXISTS users (
+        name TEXT NOT NULL PRIMARY KEY UNIQUE,
+        password CHAR(60) NOT NULL,
+        permissions TIYINT NOT NULL,
+        lastLog DATETIME DEFAULT NULL
+
+    )
+    `
+    credDB := credentials.StartCredentialDB(dbPath, credentialsStmt)
 
     return &Server{
         ctx:    ctx,
@@ -45,6 +58,7 @@ func NewServer(port string) *Server {
         th:     th,
         wp:     wp,
         mtr:    mtr,
+        credDB: credDB,
     }
 }
 
@@ -85,7 +99,7 @@ func (s *Server) StartServer() {
         return nil
     })
 
-    // Start server cli, this function returns on finish, allowing for context cancellation.
+    // Start server CLI, this function returns on finish, allowing for context cancellation.
     s.cli()
 
     // Cancel context and wait for all parts to finish.
@@ -95,6 +109,9 @@ func (s *Server) StartServer() {
             Err(err).
             Msg("Shutdown error")
     }
+
+    // As a last step close the credential database.
+    s.credDB.Close()
 }
 
 

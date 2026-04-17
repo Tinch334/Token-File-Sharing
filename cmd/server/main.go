@@ -16,12 +16,13 @@ func main() {
         panic(err)
     }
     logFilepath := filepath.Join(constants.DATA_FOLDER, constants.LOG_FILE)
+    credentialsFilepath := filepath.Join(constants.DATA_FOLDER, constants.CREDENTIALS_FILE)
 
     // Start logger.
     logFile := log.CreateLogger(logFilepath)
     defer logFile.Close()
 
     // Start server.
-    sv := server.NewServer(":8000")
+    sv := server.NewServer(":8000", credentialsFilepath)
     sv.StartServer()
 }
