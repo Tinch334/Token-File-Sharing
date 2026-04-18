@@ -100,7 +100,7 @@ func (s *Server) StartServer() {
     })
 
     // Start server CLI, this function returns on finish, allowing for context cancellation.
-    s.cli()
+    s.cli(ctx)
 
     // Cancel context and wait for all parts to finish.
     s.cancel()
@@ -110,7 +110,7 @@ func (s *Server) StartServer() {
             Msg("Shutdown error")
     }
 
-    // As a last step close the credential database.
+    // Close the credential database.
     s.credDB.Close()
 }
 
