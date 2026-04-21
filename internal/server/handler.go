@@ -38,11 +38,9 @@ Echo with "Hello":
 func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, error) {
     defer conn.Close()
 
-    // Set read deadline in case connected host disconnects.
+    // Set deadlines in case connected host disconnects.
     conn.SetReadDeadline(time.Now().Add(5 * time.Second))
     conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
-
-    fmt.Printf("%v\n", conn.RemoteAddr())
 
     // Indicates weather an auth token was present, a nil check on authBlock could be used; A dedicated variable is cleaner.
     var authPresent bool
