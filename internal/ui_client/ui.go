@@ -8,9 +8,9 @@ import (
 
 // Stores all UI elements in the main interface along with the connection to the TFS server.
 type App struct {
-	app        tview.*Application
-	pages      tview.*Pages
-	layout     tview.*Layout
+	app        *tview.Application
+	pages      *tview.Pages
+	layout     *tview.Layout
 
 	titleBar   *tview.TextView
 	localPane  *Filepanel
@@ -23,8 +23,8 @@ type App struct {
 // NewApp creates a App structure along a new tview application.
 func NewApp() *App {
 	app := App {
-		app:    tview.NewApplication()
-		pages:  tview.NewPages()
+		app:    tview.NewApplication(),
+		pages:  tview.NewPages(),
 	}
 
 	app.buildLayout()
@@ -32,7 +32,7 @@ func NewApp() *App {
 	return &a
 }
 
-// https://claude.ai/chat/6ca39e6e-3c05-4d81-b095-175f9bea7da3
+
 func (a* App) buildLayout() {
 	a.localPane = NewFilePanel("Local", a)
 	a.remotePane = NewFilePanel("Remote", a)
@@ -57,6 +57,10 @@ func (a* App) buildLayout() {
 		AddItem(a.queue.View, 6, 0, false).
 		AddItem(a.log.View,   8, 0, false).
 		AddItem(a.statusBar,  1, 0, false)
+
+	a.queue = logpanel.NewLogPanel("Local")
+	a.queue = logpanel.NewLogPanel("Remote")
+	a.log
 
 	a.pages.AddPage("main",    a.layout,             true, true)
 	a.pages.AddPage("connect", a.buildConnectForm(), true, false)
@@ -88,7 +92,7 @@ func (ui *uiElems) prevUIElem() {
 }
 
 
-func CreateClient(app tview.*Application) {
+func CreateClient(app *tview.Application) {
 
 
 

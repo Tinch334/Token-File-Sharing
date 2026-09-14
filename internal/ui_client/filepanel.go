@@ -30,7 +30,7 @@ func NewFilepanel(title string, app *App) *Filepanel {
 		View:     t,
 		app:      app,
 		entries:  make([]File),
-		selected: make(map[int]bool)
+		selected: make(map[int]bool),
 	}
 	p.bindKeys()
 

@@ -15,7 +15,7 @@ import (
 
 // readData reads all of the packet's data blocks.
 func readData(conn net.Conn) ([][]byte, error) {
-    // Read data blocks until ADDITIONAL_BLOCK_NO.
+    // Read data blocks until CONTINUATION_BYTE_NO.
     var data [][]byte
     for {
         // Read packet data size.

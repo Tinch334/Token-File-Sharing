@@ -24,12 +24,12 @@ All the data must be in Big-Endian format. The continuation indicator informs wh
 
 # Packet types
 The packet position in the list denotes it's code:
-0. An error, the data is the error message.
+0. An error, the data is the error message in ASCII.
 1. A user connection request, the data is two blocks. The first contains the username and the second the password.
 2. A token connection request, the data is the token
 3. Close, indicates that the given token will no longer be used
-4. Ok, indicates that the given operation succeeded, the data is optional, if it's present it contains a descriptive message of what succeeded.
-5. Token response, used by server to inform host of it's token.
+4. Ok, indicates that the given operation succeeded, the data is optional, if present contains a message of what succeeded.
+5. Token response, used by server to inform host of its token.
 6. Echo send, requests an echo message, the data is the echoed value.
 7. Echo receive
 8. File list request, request a list of all the files in the server.

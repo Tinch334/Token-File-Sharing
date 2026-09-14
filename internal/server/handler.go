@@ -38,7 +38,7 @@ Echo with "Hello":
 func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, error) {
     defer conn.Close()
 
-    // Set deadlines in case connected host disconnects.
+    // Set deadlines in case host disconnects.
     conn.SetReadDeadline(time.Now().Add(5 * time.Second))
     conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 
@@ -124,6 +124,7 @@ func (s *Server) dummy(data [][]byte) ([]byte, error) {
 }
 
 
+// connAuthHandler handles user authentication, if successful sends the generated token to the now authenticated user.
 func (s *Server) connAuthHandler(data [][]byte) ([]byte, error) {
     if len(data) != 2 {
         return makeErrorPacket("Invalid credential format")
@@ -144,7 +145,7 @@ func (s *Server) connAuthHandler(data [][]byte) ([]byte, error) {
 }
 
 
-// echoHandler returns an ECHO_R packet with all the received data.
+// echoHandler returns an "ECHO_R" packet with all the received data.
 func (s *Server) echoHandler(data [][]byte) ([]byte, error) {
     return makePacket(constants.ECHO_R, data)
 }

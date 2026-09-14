@@ -5,6 +5,7 @@ go 1.25.0
 require (
 	github.com/Tinch334/bmap v0.0.0-20260409041031-82574b7f7e9d // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
+	github.com/fatih/color v1.19.0 // indirect
 	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/gdamore/tcell/v2 v2.13.8 // indirect
 	github.com/gdamore/tcell/v3 v3.2.0 // indirect

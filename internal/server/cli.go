@@ -18,12 +18,12 @@ import (
 )
 
 
-// A generic type for command handlers, takes a reference to the server and the commands arguments, if any.
+// A generic type for command descriptions.
 type command struct {
     description string
     subcommands []string
 }
-// Map order is non deterministic.
+// Map order is non deterministic, a list is used to keep them ordered.
 var commandOrder = []string{
     "help", "about", "tokens", "user", "uptime", "conn", "shutdown",
 }
