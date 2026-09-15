@@ -402,3 +402,23 @@
 2026-04-18 04:49:43 INF Context cancelled, listener closed gracefully
 2026-04-18 04:49:43 INF Closed credential DB
 2026-04-18 04:49:43 INF Worker pool clean-up
+2026-09-14 23:19:05 INF Server logging started
+2026-09-14 23:19:05 INF Started credential DB
+2026-09-14 23:19:05 INF Started worker pool
+2026-09-14 23:19:05 INF Server listener started
+2026-09-14 23:19:10 INF Token cleaner running
+2026-09-14 23:19:11 INF Token cleaner stopping
+2026-09-14 23:19:11 INF Context cancelled, sever listener closing
+2026-09-14 23:19:11 INF Context cancelled, listener closed gracefully
+2026-09-14 23:19:11 INF Closed credential DB
+2026-09-15 04:20:29 INF Server logging started
+2026-09-15 04:20:30 INF Started credential DB
+2026-09-15 04:20:30 INF Started worker pool
+2026-09-15 04:20:30 INF Server listener started
+2026-09-15 04:20:35 INF Token cleaner running
+2026-09-15 04:20:40 INF Token cleaner running
+2026-09-15 04:20:43 INF Context cancelled, sever listener closing
+2026-09-15 04:20:43 INF Token cleaner stopping
+2026-09-15 04:20:43 INF Worker pool clean-up
+2026-09-15 04:20:43 INF Context cancelled, listener closed gracefully
+2026-09-15 04:20:43 INF Closed credential DB

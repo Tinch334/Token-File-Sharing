@@ -9,6 +9,7 @@ import (
     "io"
     "encoding/binary"
 
+    "github.com/Tinch334/Token-File-Sharing/internal/utils"
     "github.com/Tinch334/Token-File-Sharing/internal/constants"
 )
 
@@ -51,7 +52,7 @@ func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, erro
     header := make([]byte, 1)
     if _, err := io.ReadFull(conn, header); err != nil {
         if err == io.ErrUnexpectedEOF {
-            sendError("Truncated header", conn)
+            utils.SendError("Truncated header", conn)
         }
         return 0, fmt.Errorf("Error reading header: %w", err)
     }
@@ -60,7 +61,7 @@ func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, erro
     authSizeBytes := make([]byte, 2)
     if _, err := io.ReadFull(conn, authSizeBytes); err != nil {
         if err == io.ErrUnexpectedEOF {
-            sendError("Truncated auth size", conn)
+            utils.SendError("Truncated auth size", conn)
         }
         return 0, fmt.Errorf("Error reading auth size: %w", err)
     }
@@ -73,7 +74,7 @@ func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, erro
         authBlock := make([]byte, authSize)
         if _, err := io.ReadFull(conn, authBlock); err != nil {
             if err == io.ErrUnexpectedEOF {
-                sendError("Truncated auth data", conn)
+                utils.SendError("Truncated auth data", conn)
             }
             return 0, fmt.Errorf("Error reading auth data: %w", err)
         }
@@ -88,16 +89,16 @@ func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, erro
         if s.th.ValidateToken(authString) {
             s.th.ResetTokenTimer(authString)
         } else {
-            sendError("Invalid authentication", conn)
+            utils.SendError("Invalid authentication", conn)
             return 0, fmt.Errorf("Invalid auth, with token: %s\n", authString)
         }
     } else if header[0] != constants.USR_CONN {
-        sendError(fmt.Sprintf("Operation requires authentication: %X", header[0]), conn)
+        utils.SendError(fmt.Sprintf("Operation requires authentication: %X", header[0]), conn)
         return 0, fmt.Errorf("Operation without auth: %X\n", header[0])
     }
 
     // Read packet data.
-    data, err := readData(conn)
+    data, err := utils.ReadData(conn)
     if err != nil {
         return 0, err
     }
@@ -105,16 +106,16 @@ func (s *Server) handleConnection(ctx context.Context, conn net.Conn) (int, erro
     // Dispatch to appropriate handler.
     handler, ok := handlerMap[header[0]]
     if !ok {
-        return 0, sendError(fmt.Sprintf("Unknown command: %X", header[0]), conn)
+        return 0, utils.SendError(fmt.Sprintf("Unknown command: %X", header[0]), conn)
     }
 
     // Call handler with received data and send response.
     resData, err := handler(s, data)
     if err != nil {
-        return 0, sendError(fmt.Sprintf("Error handling %X, encountered: %v", header[0], err), conn)
+        return 0, utils.SendError(fmt.Sprintf("Error handling %X, encountered: %v", header[0], err), conn)
     }
 
-    return 0, sendPacket(resData, conn)
+    return 0, utils.SendPacket(resData, conn)
 }
 
 
@@ -127,7 +128,7 @@ func (s *Server) dummy(data [][]byte) ([]byte, error) {
 // connAuthHandler handles user authentication, if successful sends the generated token to the now authenticated user.
 func (s *Server) connAuthHandler(data [][]byte) ([]byte, error) {
     if len(data) != 2 {
-        return makeErrorPacket("Invalid credential format")
+        return utils.MakeErrorPacket("Invalid credential format")
     }
 
     usr := string(data[0])
@@ -137,15 +138,15 @@ func (s *Server) connAuthHandler(data [][]byte) ([]byte, error) {
     if usr == "Pepe" && psw == "1234" {
         // Generate new token and send it to host.
         nt := s.th.GenerateToken(usr)
-        return makePacket(constants.TOK_RES, [][]byte{[]byte(nt)})
+        return utils.MakePacket(constants.TOK_RES, [][]byte{[]byte(nt)})
     }
 
     // Invalid credentials send user and error.
-    return makeErrorPacket("Invalid credentials")
+    return utils.MakeErrorPacket("Invalid credentials")
 }
 
 
 // echoHandler returns an "ECHO_R" packet with all the received data.
 func (s *Server) echoHandler(data [][]byte) ([]byte, error) {
-    return makePacket(constants.ECHO_R, data)
+    return utils.MakePacket(constants.ECHO_R, data)
 }

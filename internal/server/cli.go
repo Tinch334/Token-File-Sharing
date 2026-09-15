@@ -34,7 +34,7 @@ var commands = map[string]command{
     "tokens": {description: "Show token information"},
     "user": {
         description: "Manage users",
-        subcommands: []string{
+        subcommands: []string {
             "new <username> <password> <permissions> - Creates a new user",
             "update (password|permissions) <new value> - Updates the corresponding user field",
             "delete <username> - Deletes the user",
