@@ -13,6 +13,20 @@ import (
 )
 
 
+// ReadHeader reads the header off the given connection, if successful returns it, otherwise returns an error.
+func ReadHeader(conn net.Conn) (byte, error) {
+    header := make([]byte, 1)
+
+    if _, err := io.ReadFull(conn, header); err != nil {
+        if err == io.ErrUnexpectedEOF {
+            return 0, err
+        }
+        return 0, err
+    }
+
+    return header[0], nil
+}
+
 // ReadData reads all of the packet's data blocks.
 func ReadData(conn net.Conn) ([][]byte, error) {
     // Read data blocks until CONTINUATION_BYTE_NO.
@@ -98,7 +112,7 @@ func MakePacket(header byte, dataList [][]byte) ([]byte, error) {
 func MakeTokenPacket(token string, header byte, dataList [][]byte) ([]byte, error) {
     lenBuf := make([]byte, 2)
     binary.BigEndian.PutUint16(lenBuf, uint16(len(token)))
-    
+
     args := [][]byte{lenBuf}
 
     if (len(token) > 0) {

@@ -36,6 +36,15 @@ func (s *status) setConn(nc *net.Conn) {
     s.conn = nc
 }
 
+// getToken returns the current token.
+func (s *status) getToken() string {
+    return s.token
+}
+
+// setToken sets the token.
+func (s *status) setToken(tok string) {
+    s.token = tok
+}
 
 // A type for command handlers, they should be self contained, handling errors and side effects internally.
 // The error string should contain a description of the error.

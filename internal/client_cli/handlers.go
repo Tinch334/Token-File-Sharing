@@ -5,6 +5,9 @@ import (
     "os"
     "time"
     "net"
+
+    "github.com/Tinch334/Token-File-Sharing/internal/utils"
+    "github.com/Tinch334/Token-File-Sharing/internal/constants"
 )
 
 
@@ -36,14 +39,15 @@ func (s *status) connectionHandler(subcommand []string) {
         }
 
         // Check the message can be created before attempting connection.
-        data, err := MakeTokenPacket("", USR_CONN, [][]byte{[]byte{subcommand[2]}, []byte{subcommand[3]}})
+        data, err := utils.MakeTokenPacket("", constants.USR_CONN, [][]byte{[]byte(subcommand[2]), []byte(subcommand[3])})
 
         if err != nil {
             warn("Invalid arguments for `conn`\n")
             return
         }
 
-        conn, err := net.DialTimeout("tcp", subcommand[1], time.Seconds(5))
+        timeout, _ := time.ParseDuration("5s")
+        conn, err := net.DialTimeout("tcp", subcommand[1], timeout)
 
         if err != nil {
             errorPrint("Could not connect to server on `%s`\n", subcommand[1])
@@ -51,25 +55,39 @@ func (s *status) connectionHandler(subcommand []string) {
         }
 
         // The connection has been established, update the state.
-        s.setConn(conn)
-        if err := SendPacket(data, *s.getConn()); err != nil {
+        s.setConn(&conn)
+        if err := utils.SendPacket(data, *s.getConn()); err != nil {
             errorPrint("Unable to establish connection with server, closing connection\n")
-            if err := s.Close(); err != nil {
+            if err := (*s.getConn()).Close(); err != nil {
+                errorPrint("Unable to close connection\n")
+            }
+            return
+        }
+
+        // Read response code to ensure a token was sent.
+        readHeader, err := utils.ReadHeader(*s.getConn())
+        if readHeader != constants.TOK_RES {
+            errorPrint("Incorrect server acknowledgement, closing connection - %d\n", readHeader)
+            if err := (*s.getConn()).Close(); err != nil {
                 errorPrint("Unable to close connection\n")
             }
             return
         }
 
         // Await the servers response with a token.
-        readData, err := ReadData(*s.getConn())
+        readData, err := utils.ReadData(*s.getConn())
 
         if err != nil {
             errorPrint("Unable to read server acknowledgement, closing connection\n")
-            if err := s.Close(); err != nil {
+            if err := (*s.getConn()).Close(); err != nil {
                 errorPrint("Unable to close connection\n")
             }
             return
         }
+
+        s.setToken(string(readData[0]))
+
+        success("Connected to server on %s\n", subcommand[1])
 
 
     case "dc":
